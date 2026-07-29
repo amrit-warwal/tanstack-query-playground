@@ -1,0 +1,148 @@
+:root {
+  --bg: #0b0c10;
+  --panel: #15171e;
+  --border: #262a35;
+  --text: #e6e8ee;
+  --muted: #9aa2b1;
+  --accent: #38bdf8;
+  --accent-2: #a78bfa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+}
+.site-title {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+h1 {
+  font-size: 28px;
+  margin: 0 0 8px;
+}
+.lead {
+  color: var(--muted);
+  margin: 0 0 28px;
+}
+
+.example-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+.example-card {
+  display: block;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 18px 20px;
+  color: var(--text);
+}
+.example-card:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+.example-card h3 {
+  margin: 0 0 4px;
+  color: var(--accent);
+}
+.example-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 10px 0;
+}
+.card h3 {
+  margin: 0 0 4px;
+}
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+button {
+  background: var(--accent);
+  color: #06121a;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.status {
+  color: var(--muted);
+  font-size: 14px;
+}
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(167, 139, 250, 0.15);
+  color: var(--accent-2);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+}
