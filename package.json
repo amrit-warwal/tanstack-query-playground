@@ -11,6 +11,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
@@ -21,9 +22,12 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.101.4",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.3.1",
     "typescript": "^5"
   }
 }
