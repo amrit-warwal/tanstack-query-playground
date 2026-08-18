@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchPosts, createPost } from '../lib/api'
+import ViewSource from '../components/view-source'
 
 // Demonstrates the read + write loop: a useQuery to show the list, a
 // useMutation to add to it, and invalidation to keep the list fresh.
@@ -35,6 +36,7 @@ export default function QueryMutationsPage() {
         fakes the write, so the new item won&apos;t truly persist — watch the
         network tab and devtools to see the flow.)
       </p>
+      <ViewSource example="query-mutations" />
 
       <form
         className="row"

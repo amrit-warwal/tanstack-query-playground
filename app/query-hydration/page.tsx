@@ -3,6 +3,7 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import { getQueryClient } from '../get-query-client'
 import { fetchPosts } from '../lib/api'
 import Posts from './posts'
+import ViewSource from '../components/view-source'
 
 // This is a SERVER component (no "use client"). It runs on the server, where we
 // prefetch the query into a per-request QueryClient, then serialize that cache
@@ -31,9 +32,11 @@ export default async function QueryHydrationPage() {
         Server prefetch + hydration <span className="badge">App Router</span>
       </h1>
       <p className="lead">
-        Data is fetched on the server and handed to the client already warm. View
-        source — the posts are in the initial HTML.
+        Data is fetched on the server and handed to the client already warm. Use
+        your browser&apos;s <em>View Page Source</em> — the posts are in the
+        initial HTML.
       </p>
+      <ViewSource example="query-hydration" />
 
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Posts />

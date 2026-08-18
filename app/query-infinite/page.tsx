@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { fetchPostsPage } from '../lib/api'
+import ViewSource from '../components/view-source'
 
 const LIMIT = 10
 
@@ -30,11 +31,8 @@ export default function QueryInfinitePage() {
     },
   })
 
-  if (isPending) return <p className="status">Loading…</p>
-  if (isError) return <p className="status">Error: {error.message}</p>
-
   // data.pages is an array of pages; flatten for rendering.
-  const posts = data.pages.flat()
+  const posts = data?.pages.flat() ?? []
 
   return (
     <>
@@ -47,10 +45,16 @@ export default function QueryInfinitePage() {
         <code>getNextPageParam</code> computes the next page and returns{' '}
         <code>undefined</code> to signal the end.
       </p>
+      <ViewSource example="query-infinite" />
 
-      <p className="status">
-        {posts.length} posts across {data.pages.length} page(s)
-      </p>
+      {isPending && <p className="status">Loading…</p>}
+      {isError && <p className="status">Error: {error.message}</p>}
+
+      {data && (
+        <p className="status">
+          {posts.length} posts across {data.pages.length} page(s)
+        </p>
+      )}
 
       {posts.map((post) => (
         <div key={post.id} className="card">
@@ -58,18 +62,20 @@ export default function QueryInfinitePage() {
         </div>
       ))}
 
-      <div style={{ marginTop: 16 }}>
-        <button
-          onClick={() => fetchNextPage()}
-          disabled={!hasNextPage || isFetchingNextPage}
-        >
-          {isFetchingNextPage
-            ? 'Loading more…'
-            : hasNextPage
-              ? 'Load more'
-              : 'No more posts'}
-        </button>
-      </div>
+      {data && (
+        <div style={{ marginTop: 16 }}>
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={!hasNextPage || isFetchingNextPage}
+          >
+            {isFetchingNextPage
+              ? 'Loading more…'
+              : hasNextPage
+                ? 'Load more'
+                : 'No more posts'}
+          </button>
+        </div>
+      )}
     </>
   )
 }

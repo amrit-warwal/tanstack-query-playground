@@ -137,6 +137,244 @@ input {
   color: var(--muted);
   font-size: 14px;
 }
+
+/* ---------- View source code ----------
+   NOTE: the bare `button` rule above paints every button solid accent. All of
+   the buttons below have to opt out of it explicitly, not just add to it. */
+
+.src-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  /* Pull up under .lead's 28px bottom margin so it reads as attached to the
+     description rather than floating between sections. */
+  margin: -18px 0 28px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.src-link:hover {
+  border-color: var(--accent);
+  background: rgba(56, 189, 248, 0.08);
+}
+.src-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.src-dialog {
+  width: min(880px, calc(100vw - 32px));
+  /* The UA default is `fit-content` with its own max-width — both need clearing. */
+  max-width: none;
+  /* A FIXED height, not max-height. The dialog is centred by the UA, so if it
+     sized to its content the whole thing would grow and shrink as you switch
+     between a 75-line page.tsx and a 23-line notes.md — sliding the header and
+     tabs up and down under the cursor. Fixed height pins the chrome and lets
+     the code scroll inside. It also stops the dialog jumping when the source
+     finishes loading. */
+  height: min(80vh, 720px);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+/* ::backdrop does not reliably inherit custom properties, so --bg is spelled out. */
+.src-dialog::backdrop {
+  background: rgba(11, 12, 16, 0.72);
+}
+
+/* showModal() doesn't lock scrolling; the page behind still scrolls. Scoped to
+   this dialog so a future non-modal <dialog> doesn't freeze the page, and
+   paired with scrollbar-gutter so removing the scrollbar doesn't shift the
+   layout underneath the backdrop. */
+html {
+  scrollbar-gutter: stable;
+}
+html:has(.src-dialog[open]) {
+  overflow: hidden;
+}
+
+.src-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.src-head {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.src-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.src-close {
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.src-close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+.src-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.src-tabs {
+  display: flex;
+  /* MUST NOT shrink. `overflow-x: auto` below makes this item's automatic
+     minimum size 0 instead of its content size, and .src-body's `flex: 1`
+     (basis 0) means it absorbs none of the shrinkage — so when the panel hits
+     max-height, ALL of it lands here and the tabs get sliced in half. */
+  flex: 0 0 auto;
+  gap: 4px;
+  padding: 8px 12px 0;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  /* Once there are enough files to scroll, keyboard-arrowing to the first tab
+     would otherwise scroll the container's left padding out of view. */
+  scroll-padding-inline: 12px;
+}
+.src-tab {
+  padding: 8px 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 6px 6px 0 0;
+  background: none;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.src-tab:hover {
+  color: var(--text);
+}
+.src-tab[aria-selected='true'] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(56, 189, 248, 0.06);
+}
+.src-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.src-body {
+  /* Same background as the code, so a short file leaves an empty editor pane
+     rather than a strip of panel colour under the last line. */
+  background: var(--bg);
+  /* `flex: 1` (basis 0%) would give this a shrink weight of 0, pushing all
+     shrinkage onto the tab row. Basis auto makes this the item that absorbs it,
+     which is what we want since it scrolls. */
+  flex: 1 1 auto;
+  /* Without min-height:0 a flex child refuses to shrink below its content, so
+     the dialog would overflow the viewport instead of scrolling here. */
+  min-height: 0;
+  overflow: auto;
+}
+.src-body:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.src-note {
+  margin: 0;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.src-pre {
+  margin: 0;
+  /* Padding lives on <code>, not here — see below. */
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  tab-size: 2;
+  white-space: pre;
+  overflow-x: auto;
+  /* Stops a trackpad swipe past the end of a long line from triggering browser
+     back-navigation out of the dialog. */
+  overscroll-behavior-x: contain;
+}
+
+/* Padding on a horizontally scrolling <pre> collapses on the right at max
+   scroll, so long lines end up flush against the edge. Putting it on a
+   block-level <code> sized to its own content keeps the trailing gutter. */
+.src-pre code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  padding: 16px;
+  font: inherit;
+}
+
+/* ---------- Syntax tokens ----------
+   Produced server-side by app/lib/highlight.ts.
+
+   Comments are deliberately --muted (7.6:1 on --bg) rather than the dim grey
+   most dark themes use (~3-4:1). In this repo the comments ARE the lesson, so
+   they get the same weight as the rest of the muted UI text. */
+.tok-comment {
+  color: var(--muted);
+}
+.tok-keyword {
+  color: var(--accent-2);
+}
+.tok-tag {
+  color: var(--accent);
+}
+.tok-string {
+  color: #7ee2b8;
+}
+.tok-number {
+  color: #f0b072;
+}
+
+/* markdown */
+.tok-heading {
+  color: var(--accent);
+  font-weight: 600;
+}
+.tok-code {
+  color: #7ee2b8;
+}
+.tok-bold {
+  color: var(--text);
+  font-weight: 600;
+}
+.tok-marker {
+  color: var(--accent-2);
+}
 .badge {
   display: inline-block;
   font-size: 12px;
