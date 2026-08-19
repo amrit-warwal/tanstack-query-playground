@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { fetchPosts } from '../lib/api'
+import ViewSource from '../components/view-source'
 
 // The simplest possible example: a client component that fetches on mount.
 // Everything happens in the browser — no server prefetch here (see example 2
@@ -23,6 +24,7 @@ export default function QueryBasicPage() {
         A client-side <code>useQuery</code>. Note the three states:{' '}
         <code>isPending</code>, <code>isError</code>, and success.
       </p>
+      <ViewSource example="query-basic" />
 
       {isPending && <p className="status">Loading…</p>}
       {isError && <p className="status">Error: {error.message}</p>}
