@@ -51,6 +51,13 @@ Every example has a **View Source Code** link under its description that opens
 its own source — plus its `notes.md` — in an overlay, so the code and the "why"
 are one click from the running demo.
 
+After the example's own files, and separated by a divider in the tab row, come
+the **shared** files it leans on: `app/lib/api.ts` (the fetcher behind the
+query) and `app/components/view-source.tsx` (the overlay itself). A `page.tsx`
+on its own only tells half the story — the fetch it calls lives elsewhere. Add
+a file to the `SHARED` list in `app/lib/example-sources.ts` and every example
+picks it up.
+
 `app/api/source/route.ts` serves the files and `app/lib/example-sources.ts` is
 the allowlist of what it may read. The browser sends an example *slug*, never a
 path, so there's no traversal surface.

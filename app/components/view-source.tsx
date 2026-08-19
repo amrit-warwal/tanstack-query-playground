@@ -10,6 +10,8 @@ export interface SourceFile {
   tokens: Token[]
   /** One-line "what this file is" shown above the code. */
   note?: string
+  /** A repo-wide file rather than one of this example's own. */
+  shared?: boolean
 }
 
 async function fetchSource(example: string): Promise<SourceFile[]> {
@@ -82,6 +84,11 @@ export default function ViewSource({ example }: { example: string }) {
   const hasTabs = (files?.length ?? 0) > 1
   const current = files?.[active]
 
+  // Where the example's own files end and the shared ones begin, so the tab row
+  // can draw a divider there. -1 (none shared) and 0 (all shared) both mean
+  // "no divider", which the `> 0` check below covers.
+  const sharedStart = files ? files.findIndex((file) => file.shared) : -1
+
   return (
     <>
       <button
@@ -141,7 +148,11 @@ export default function ViewSource({ example }: { example: string }) {
                     type="button"
                     role="tab"
                     id={`${titleId}-tab-${i}`}
-                    className="src-tab"
+                    className={
+                      i === sharedStart && i > 0
+                        ? 'src-tab src-tab--shared-start'
+                        : 'src-tab'
+                    }
                     aria-selected={i === active}
                     aria-controls={`${titleId}-panel`}
                     // Roving tabindex: only the active tab is in the tab order,

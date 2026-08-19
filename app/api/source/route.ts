@@ -57,7 +57,7 @@ export async function GET(request: Request) {
         // Only `tokens` goes over the wire. Sending `code` too would ship the
         // whole source twice, and since the fallback above is itself a single
         // plain token, the client never needs the raw string.
-        return { name, tokens, note: entry.note }
+        return { name, tokens, note: entry.note, shared: entry.shared }
       }),
     )
     return Response.json({ files })
